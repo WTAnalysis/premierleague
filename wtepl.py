@@ -25,8 +25,8 @@ from PIL import Image
 from matplotlib import colors as mcolors
 
 wtaimaged = Image.open("wtatransnew.png")
-st.set_page_config(page_title="WT Analysis - Match Visuals", layout="wide")
-st.title("WT Analysis - Match Visuals")
+st.set_page_config(page_title="WT Analysis - Premier League Visuals", layout="wide")
+st.title("WT Analysis - Premier League Visuals")
 schedule_df = pd.DataFrame()
 selected_description = None
 matchlink = None
@@ -74,7 +74,7 @@ if selected_season != "-- Select Season --" and selected_competition != "-- Sele
     ]
     if not filtered_row.empty:
         dataafterleague = filtered_row.iloc[0]['seasonid']
-        st.success(f"Selected competition ID: {dataafterleague}")
+        st.success(f"Loading {selected_competition} fixtures...")
     else:
         st.warning("No matching competition found.")
         
