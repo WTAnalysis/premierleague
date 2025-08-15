@@ -99,16 +99,16 @@ if not schedule_df.empty and 'description' in schedule_df.columns:
 
     available_dates = sorted(schedule_df['date'].dt.date.unique())
     if available_dates:
-    min_date = min(available_dates)
-    max_date = datetime.date.today()
-    
-    selected_date = st.date_input(
-        "Select match date:",
-        value=max_date if max_date in available_dates else min_date,
-        min_value=min_date,
-        max_value=max_date,
-        key="match_date"
-    )
+        min_date = min(available_dates)
+        max_date = datetime.date.today()
+        
+        selected_date = st.date_input(
+            "Select match date:",
+            value=max_date if max_date in available_dates else min_date,
+            min_value=min_date,
+            max_value=max_date,
+            key="match_date"
+        )
 
         if selected_date not in available_dates:
             st.warning("No fixtures on this date. Please pick another date with fixtures.")
