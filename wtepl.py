@@ -88,7 +88,7 @@ if dataafterleague:
             break
     schedule_df = pd.DataFrame(all_matches)
 
-# --- Build date selector from available schedule dates ---
+# --- Build date selector from available schedule dates (calendar) ---
 selected_date = None
 if not schedule_df.empty and 'description' in schedule_df.columns:
     # tidy
@@ -98,11 +98,25 @@ if not schedule_df.empty and 'description' in schedule_df.columns:
     schedule_df = schedule_df.dropna(subset=["description", "date"])
 
     available_dates = sorted(schedule_df['date'].dt.date.unique())
-    date_labels = [d.strftime("%Y-%m-%d") for d in available_dates]
-    date_choice = st.selectbox("Select match date:", ["-- Select date --"] + date_labels, key="match_date")
+    if available_dates:
+        min_date, max_date = min(available_dates), max(available_dates)
+        default_date = (
+            datetime.date.today()
+            if datetime.date.today() in available_dates
+            else min_date
+        )
 
-    if date_choice != "-- Select date --":
-        selected_date = datetime.datetime.strptime(date_choice, "%Y-%m-%d").date()
+        selected_date = st.date_input(
+            "Select match date:",
+            value=default_date,
+            min_value=min_date,
+            max_value=max_date,
+            key="match_date"
+        )
+
+        if selected_date not in available_dates:
+            st.warning("No fixtures on this date. Please pick another date with fixtures.")
+            selected_date = None
 else:
     if dataafterleague:
         st.info("No fixtures found for this league.")
@@ -128,6 +142,7 @@ if selected_date:
             else:
                 st.warning("Selected match not found in data.")
 
+# --- Colours (kept at the end) ---
 homecolor1 = st.selectbox("Home Colour 1", color_options, index=color_options.index('red') if 'red' in color_options else 0)
 homecolor2 = st.selectbox("Home Colour 2", color_options, index=color_options.index('orange') if 'orange' in color_options else 0)
 awaycolor1 = st.selectbox("Away Colour 1", color_options, index=color_options.index('blue') if 'blue' in color_options else 0)
