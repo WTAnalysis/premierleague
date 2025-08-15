@@ -10,6 +10,7 @@ import streamlit as st
 import requests, json, re, datetime
 import warnings
 warnings.simplefilter(action="ignore", category=FutureWarning)
+import io
 
 import pandas as pd
 import numpy as np
