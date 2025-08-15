@@ -21,7 +21,8 @@ st.set_page_config(page_title="WT Analysis - Premier League Visuals", layout="wi
 st.title("WT Analysis - Premier League Visuals")
 
 wtaimaged = Image.open("wtatransnew.png")
-
+homeimage = Image.open("wtatransnew.png")
+awayimage = Image.open("wtatransnew.png")
 # --- Inputs / globals ---
 league_dict = pd.read_excel("league_dict.xlsx")
 league_dict['Season'] = league_dict['Season'].astype(str)
@@ -52,8 +53,7 @@ headers = {
     'Referer': 'https://www.scoresway.com/',
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'
 }
-homeimage = None
-awayimage = None
+
 schedule_df = pd.DataFrame()
 if dataafterleague:
     all_matches, page, page_size = [], 1, 400
