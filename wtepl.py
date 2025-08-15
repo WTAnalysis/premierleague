@@ -3,178 +3,137 @@
 
 # In[ ]:
 
-import os
-import io
+#!/usr/bin/env python
+# coding: utf-8
 
 import streamlit as st
-import requests
-import json
-import re
-import matplotlib.pyplot as plt
+import requests, json, re, datetime
 import warnings
-from pandas.errors import SettingWithCopyWarning
-warnings.simplefilter(action="ignore", category=SettingWithCopyWarning)
+warnings.simplefilter(action="ignore", category=FutureWarning)
+
 import pandas as pd
 import numpy as np
-from matplotlib.colors import to_rgba
-from mplsoccer import Pitch, VerticalPitch
-from matplotlib.colors import LinearSegmentedColormap
-import matplotlib.patheffects as path_effects
-import matplotlib.patches as patches
-from PIL import Image
 from matplotlib import colors as mcolors
-import datetime
+from PIL import Image
 
-wtaimaged = Image.open("wtatransnew.png")
+# --- Page setup ---
 st.set_page_config(page_title="WT Analysis - Premier League Visuals", layout="wide")
 st.title("WT Analysis - Premier League Visuals")
-from datetime import date
-#selected_date = st.date_input("Select match date:", value=date.today())
-#st.write("Server time (UTC):", datetime.datetime.utcnow())
-#st.write("Server time (local):", datetime.datetime.now())
-schedule_df = pd.DataFrame()
-selected_description = None
-matchlink = Noneschedule_df = pd.DataFrame()
 
-# Inputs
-import pandas as pd
-from datetime import datetime
-matchlink = None
-playername = None
+wtaimaged = Image.open("wtatransnew.png")
 
-# Load match schedule
-import requests
-import json
-import re
-import pandas as pd
-
+# --- Inputs / globals ---
 league_dict = pd.read_excel("league_dict.xlsx")
-color_options = sorted(mcolors.CSS4_COLORS.keys())
-
-# Add four new dropdowns for home/away colors
-homecolor1 = st.selectbox("Home Colour 1", color_options, index=color_options.index('red') if 'red' in color_options else 0)
-homecolor2 = st.selectbox("Home Colour 2", color_options, index=color_options.index('orange') if 'orange' in color_options else 0)
-awaycolor1 = st.selectbox("Away Colour 1", color_options, index=color_options.index('blue') if 'blue' in color_options else 0)
-awaycolor2 = st.selectbox("Away Colour 2", color_options, index=color_options.index('yellow') if 'yellow' in color_options else 0)
-# Ensure columns are strings
 league_dict['Season'] = league_dict['Season'].astype(str)
 league_dict['Competition'] = league_dict['Competition'].astype(str)
 
-# Dropdown to select Season
-# --- Season & Competition ---
+color_options = sorted(mcolors.CSS4_COLORS.keys())
+
+# --- Season & competition selection ---
 season_options = sorted(league_dict['Season'].dropna().unique())
 selected_season = st.selectbox("Select Season", ["-- Select Season --"] + season_options)
 
 if selected_season != "-- Select Season --":
-    competitions = league_dict[league_dict['Season'] == selected_season]['Competition'].dropna().unique()
+    competitions = league_dict.loc[league_dict['Season'] == selected_season, 'Competition'].dropna().unique()
     selected_competition = st.selectbox("Select Competition", ["-- Select Competition --"] + sorted(competitions))
 else:
     selected_competition = "-- Select Competition --"
 
+# --- Resolve season id ---
 dataafterleague = None
 if selected_season != "-- Select Season --" and selected_competition != "-- Select Competition --":
-    filtered_row = league_dict[
-        (league_dict['Season'] == selected_season) &
-        (league_dict['Competition'] == selected_competition)
-    ]
-    if not filtered_row.empty:
-        dataafterleague = filtered_row.iloc[0]['seasonid']
+    row = league_dict[(league_dict['Season'] == selected_season) & (league_dict['Competition'] == selected_competition)]
+    if not row.empty:
+        dataafterleague = row.iloc[0]['seasonid']
         st.success(f"Loading {selected_competition} fixtures...")
 
-        # 👉 Ask for date *after* league selection
-        from datetime import date
-        selected_date = st.date_input("Select match date:", value=date.today(), key="match_date")
-    else:
-        st.warning("No matching competition found.")
-        
+# --- Fetch schedule for the chosen league ---
 headers = {
     'Referer': 'https://www.scoresway.com/',
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'
 }
 
 schedule_df = pd.DataFrame()
-selected_description = None
-matchlink = None
-
 if dataafterleague:
-    # Fetch matches
-    all_matches = []
-    page = 1
-    page_size = 400
-
+    all_matches, page, page_size = [], 1, 400
     while True:
         callback = "W385e5c699195bebaec15e4789d8caa477937fcb98"
-        schedule_url = (
-            f"https://api.performfeeds.com/soccerdata/match/ft1tiv1inq7v1sk3y9tv12yh5/"
-            f"?_rt=c&tmcl={dataafterleague}&live=yes&_pgSz={page_size}&_pgNm={page}"
-            f"&_lcl=en&_fmt=jsonp&sps=widgets&_clbk={callback}"
-        )
-        response = requests.get(schedule_url, headers=headers)
-        if response.status_code != 200:
-            st.warning(f"Failed to retrieve page {page}. Status code: {response.status_code}")
+        url = (f"https://api.performfeeds.com/soccerdata/match/ft1tiv1inq7v1sk3y9tv12yh5/"
+               f"?_rt=c&tmcl={dataafterleague}&live=yes&_pgSz={page_size}&_pgNm={page}"
+               f"&_lcl=en&_fmt=jsonp&sps=widgets&_clbk={callback}")
+        r = requests.get(url, headers=headers)
+        if r.status_code != 200:
+            st.warning(f"Failed to retrieve page {page}. Status code: {r.status_code}")
             break
-
         try:
-            jsonp_data = response.text
-            json_str = re.search(r'\((.*)\)', jsonp_data).group(1)
-            schedule_data = json.loads(json_str)
-            matches = schedule_data.get('match', [])
+            json_str = re.search(r'\((.*)\)', r.text).group(1)
+            data = json.loads(json_str)
+            matches = data.get('match', [])
             if not matches:
                 break
-
             if not isinstance(matches, list):
                 matches = [matches]
-
-            for match in matches:
-                match_info = match.get('matchInfo', {})
-                if match_info:
+            for m in matches:
+                mi = m.get('matchInfo', {})
+                if mi:
                     all_matches.append({
-                        'id': match_info.get('id'),
-                        'description': match_info.get('description'),
-                        'date': match_info.get('date'),
-                        'time': match_info.get('time')
+                        'id': mi.get('id'),
+                        'description': mi.get('description'),
+                        'date': mi.get('date'),
+                        'time': mi.get('time')
                     })
             page += 1
-
         except Exception as e:
             st.warning(f"Error parsing page {page}: {e}")
             break
-
     schedule_df = pd.DataFrame(all_matches)
 
-# Only proceed if schedule_df is valid and has 'description'
+# --- Build date selector from available schedule dates ---
+selected_date = None
 if not schedule_df.empty and 'description' in schedule_df.columns:
+    # tidy
     schedule_df[['Home_Team', 'Away_Team']] = schedule_df['description'].str.split(' vs ', expand=True)
     schedule_df['date'] = schedule_df['date'].str.replace('Z', '', regex=False)
     schedule_df['date'] = pd.to_datetime(schedule_df['date'], errors='coerce')
-    schedule_df = schedule_df.dropna(subset=["description"])
-    
-    schedule_df = schedule_df.dropna(subset=["date"])
-    schedule_df = schedule_df[ schedule_df["date"].dt.date == selected_date ]
-    schedule_df = schedule_df.sort_values(by="date", ascending=False)
+    schedule_df = schedule_df.dropna(subset=["description", "date"])
 
-    schedule_df['formatted_date'] = schedule_df['date'].dt.strftime('%d/%m/%y')
-    schedule_df['display'] = schedule_df['Home_Team'] + ' v ' + schedule_df['Away_Team'] + ' - ' + schedule_df['formatted_date']
+    available_dates = sorted(schedule_df['date'].dt.date.unique())
+    date_labels = [d.strftime("%Y-%m-%d") for d in available_dates]
+    date_choice = st.selectbox("Select match date:", ["-- Select date --"] + date_labels, key="match_date")
 
-    match_dict = dict(zip(schedule_df['display'], schedule_df['id']))
-    options = ["-- Select a match --"] + schedule_df["display"].tolist()
-    selected_description = st.selectbox("Select a Match", options=options)
+    if date_choice != "-- Select date --":
+        selected_date = datetime.datetime.strptime(date_choice, "%Y-%m-%d").date()
+else:
+    if dataafterleague:
+        st.info("No fixtures found for this league.")
+    else:
+        st.info("Please select a Season and Competition to continue.")
 
-    if selected_description != "-- Select a match --":
-        if 'description' in schedule_df.columns and 'id' in schedule_df.columns:
-            match_row = schedule_df[schedule_df['display'] == selected_description]
-            if not match_row.empty:
-                matchlink = match_row["id"].values[0]
+# --- Filter to selected date and choose match ---
+selected_description, matchlink = None, None
+if selected_date:
+    day_df = schedule_df[schedule_df["date"].dt.date == selected_date].sort_values(by="date", ascending=False)
+    if day_df.empty:
+        st.warning("No matches on the selected date.")
+    else:
+        day_df['formatted_date'] = day_df['date'].dt.strftime('%d/%m/%y')
+        day_df['display'] = day_df['Home_Team'] + ' v ' + day_df['Away_Team'] + ' - ' + day_df['formatted_date']
+
+        selected_description = st.selectbox("Select a Match", ["-- Select a match --"] + day_df["display"].tolist())
+        if selected_description != "-- Select a match --":
+            row = day_df[day_df['display'] == selected_description]
+            if not row.empty:
+                matchlink = row["id"].values[0]
                 st.info(f"Analyzing match: {selected_description}")
             else:
                 st.warning("Selected match not found in data.")
-        else:
-            st.error("Match data is incomplete. Please check API response or retry.")
-else:
-    st.info("Please select a Season and Competition to continue.")
-    
+
+homecolor1 = st.selectbox("Home Colour 1", color_options, index=color_options.index('red') if 'red' in color_options else 0)
+homecolor2 = st.selectbox("Home Colour 2", color_options, index=color_options.index('orange') if 'orange' in color_options else 0)
+awaycolor1 = st.selectbox("Away Colour 1", color_options, index=color_options.index('blue') if 'blue' in color_options else 0)
+awaycolor2 = st.selectbox("Away Colour 2", color_options, index=color_options.index('yellow') if 'yellow' in color_options else 0)
 if matchlink:
-    #st.info(f"Analyzing {matchlink}...")
+    pass  # your downstream code continues here
 
     url = f'https://api.performfeeds.com/soccerdata/matchevent/ft1tiv1inq7v1sk3y9tv12yh5/{matchlink}?_rt=c&_lcl=en&_fmt=jsonp&sps=widgets&_clbk=W351bc3acc0d0c4e5b871ac99dfbfeb44bb58ba1dc'
     headers = {
