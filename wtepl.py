@@ -27,9 +27,14 @@ from matplotlib import colors as mcolors
 wtaimaged = Image.open("wtatransnew.png")
 st.set_page_config(page_title="WT Analysis - Premier League Visuals", layout="wide")
 st.title("WT Analysis - Premier League Visuals")
+from datetime import date
+selected_date = st.date_input("Select match date:", value=date.today())
+st.write("Server time (UTC):", datetime.datetime.utcnow())
+st.write("Server time (local):", datetime.datetime.now())
 schedule_df = pd.DataFrame()
 selected_description = None
-matchlink = None
+matchlink = Noneschedule_df = pd.DataFrame()
+
 # Inputs
 import pandas as pd
 from datetime import datetime
@@ -140,9 +145,8 @@ if not schedule_df.empty and 'description' in schedule_df.columns:
     schedule_df['date'] = pd.to_datetime(schedule_df['date'], errors='coerce')
     schedule_df = schedule_df.dropna(subset=["description"])
     
-    today = pd.to_datetime(datetime.today().date())
-    ten_days_ago = today - pd.Timedelta(days=7)
-    schedule_df = schedule_df[(schedule_df["date"] >= ten_days_ago) & (schedule_df["date"] <= today)]
+    schedule_df = schedule_df.dropna(subset=["date"])
+    schedule_df = schedule_df[ schedule_df["date"].dt.date == selected_date ]
     schedule_df = schedule_df.sort_values(by="date", ascending=False)
 
     schedule_df['formatted_date'] = schedule_df['date'].dt.strftime('%d/%m/%y')
@@ -157,7 +161,7 @@ if not schedule_df.empty and 'description' in schedule_df.columns:
             match_row = schedule_df[schedule_df['display'] == selected_description]
             if not match_row.empty:
                 matchlink = match_row["id"].values[0]
-                st.info(f"Analyzing match: {selected_description} - If error, try again later in the match! If error remains, contact WT_Analysis on Twitter/X")
+                st.info(f"Analyzing match: {selected_description}")
             else:
                 st.warning("Selected match not found in data.")
         else:
@@ -165,8 +169,6 @@ if not schedule_df.empty and 'description' in schedule_df.columns:
 else:
     st.info("Please select a Season and Competition to continue.")
     
-
-
 if matchlink:
     #st.info(f"Analyzing {matchlink}...")
 
