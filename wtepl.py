@@ -29,9 +29,9 @@ wtaimaged = Image.open("wtatransnew.png")
 st.set_page_config(page_title="WT Analysis - Premier League Visuals", layout="wide")
 st.title("WT Analysis - Premier League Visuals")
 from datetime import date
-selected_date = st.date_input("Select match date:", value=date.today())
-st.write("Server time (UTC):", datetime.datetime.utcnow())
-st.write("Server time (local):", datetime.datetime.now())
+#selected_date = st.date_input("Select match date:", value=date.today())
+#st.write("Server time (UTC):", datetime.datetime.utcnow())
+#st.write("Server time (local):", datetime.datetime.now())
 schedule_df = pd.DataFrame()
 selected_description = None
 matchlink = Noneschedule_df = pd.DataFrame()
