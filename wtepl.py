@@ -2615,7 +2615,9 @@ if matchlink:
                     ax.set_yticks([])
                     ax.axhline(y=0, color='black', linewidth=0.8)
                     ax.grid(True, which='both', linestyle='--', linewidth=0.5, color='gray')
-                
+                    ax.tick_params(colors=TextColor)
+                    ax.xaxis.label.set_color(TextColor)
+                    ax.yaxis.label.set_color(TextColor)
                     # ---------- logos (clean & add) ----------
                     home_img_wm = prepare_watermark(homeimage, opacity=0.12)
                     away_img_wm = prepare_watermark(awayimage, opacity=0.12)
