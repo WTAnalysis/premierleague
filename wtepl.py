@@ -61,26 +61,29 @@ league_dict['Season'] = league_dict['Season'].astype(str)
 league_dict['Competition'] = league_dict['Competition'].astype(str)
 
 # Dropdown to select Season
+# --- Season & Competition ---
 season_options = sorted(league_dict['Season'].dropna().unique())
 selected_season = st.selectbox("Select Season", ["-- Select Season --"] + season_options)
 
-# Conditional dropdown for Competition
 if selected_season != "-- Select Season --":
     competitions = league_dict[league_dict['Season'] == selected_season]['Competition'].dropna().unique()
     selected_competition = st.selectbox("Select Competition", ["-- Select Competition --"] + sorted(competitions))
 else:
     selected_competition = "-- Select Competition --"
 
-# Get the seasonid based on selected values
 dataafterleague = None
 if selected_season != "-- Select Season --" and selected_competition != "-- Select Competition --":
     filtered_row = league_dict[
-        (league_dict['Season'] == selected_season) & 
+        (league_dict['Season'] == selected_season) &
         (league_dict['Competition'] == selected_competition)
     ]
     if not filtered_row.empty:
         dataafterleague = filtered_row.iloc[0]['seasonid']
         st.success(f"Loading {selected_competition} fixtures...")
+
+        # 👉 Ask for date *after* league selection
+        from datetime import date
+        selected_date = st.date_input("Select match date:", value=date.today(), key="match_date")
     else:
         st.warning("No matching competition found.")
         
