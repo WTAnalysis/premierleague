@@ -99,7 +99,13 @@ if not schedule_df.empty and 'description' in schedule_df.columns:
 
     available_dates = sorted(schedule_df['date'].dt.date.unique())
     if available_dates:
-        min_date, max_date = min(available_dates), max(available_dates)
+        min_date = min(available_dates)
+        selected_date = st.date_input(
+            "Select match date:",
+            value=datetime.date.today(),
+            min_value=min_date,
+            key="match_date"
+        )
         default_date = (
             datetime.date.today()
             if datetime.date.today() in available_dates
