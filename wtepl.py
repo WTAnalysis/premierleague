@@ -161,7 +161,13 @@ if matchlink:
     else:
         # Clean JSONP
         cleaned_text = re.sub(r'^.*?\(', '', response.text)[:-1]
-        data = json.loads(cleaned_text)
+        
+        try:
+            data = json.loads(cleaned_text)
+        except json.JSONDecodeError:
+            st.info("Not enough time has elapsed in the match, please check back later. If issues remain, please contact WT_Analysis on X/Twitter")
+            st.stop()
+            data = json.loads(cleaned_text)
         import requests
         import json
         import re
@@ -221,7 +227,23 @@ if matchlink:
         # Make sure you have the JSON data loaded as a dictionary in `data`
         if 'liveData' in data:
             matchevents = data['liveData']
-            print(matchevents)
+            try:
+                events_candidate = data.get('liveData', {}).get('event', None)
+            except AttributeError:
+                events_candidate = None
+            
+            matchinfo_candidate = data.get('matchInfo', {})
+            
+            if not events_candidate:
+                st.info("Not enough time has elapsed in the match, please check back later. If issues remain, please contact WT_Analysis on X/Twitter")
+                st.stop()
+            
+            # Normalize possible dict -> list
+            if isinstance(events_candidate, dict):
+                events_candidate = [events_candidate]
+            if isinstance(events_candidate, list) and len(events_candidate) == 0:
+                st.info("Not enough time has elapsed in the match, please check back later. If issues remain, please contact WT_Analysis on X/Twitter")
+                st.stop()
         else:
             print("The key 'liveData' was not found in the JSON response.")
         # Make sure you have the JSON data loaded as a dictionary in `data`
@@ -244,6 +266,11 @@ if matchlink:
         matchevents_df = pd.json_normalize(matchevents)
         import pandas as pd
         events_expanded = pd.json_normalize(matchevents_df['event'].explode())
+        
+# If there are no events yet, exit gracefully
+        if events_expanded is None or len(events_expanded.index) == 0:
+            st.info("Not enough time has elapsed in the match, please check back later. If issues remain, please contact WT_Analysis on X/Twitter")
+            st.stop()
         def expand_qualifiers(row):
             # Each qualifier in the list will be expanded with index-based column names
             if isinstance(row, list):
