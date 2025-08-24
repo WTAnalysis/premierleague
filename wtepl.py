@@ -2273,8 +2273,8 @@ if matchlink:
                     playercarry = anderson.loc[anderson['typeId']=='Carry']
             
                     #shotblock = anderson.loc[(anderson['shot']==True) & (anderson['82']==True) & (anderson['player_name'] == playerrequest)]
-                    shotoff = anderson.loc[(anderson['typeId'] == 'Miss']
-                    shotoff2 = anderson.loc[(anderson['typeId'] == 'Post']
+                    shotoff = anderson.loc[(anderson['typeId'] == 'Miss')]
+                    shotoff2 = anderson.loc[(anderson['typeId'] == 'Post')]
 
                     shoton = anderson.loc[(anderson['typeId'] == 'Attempt Saved')]
                     shotgoal = anderson.loc[(anderson['typeId'] == 'Goal')]
