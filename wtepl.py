@@ -2273,7 +2273,7 @@ if matchlink:
                     playercarry = anderson.loc[anderson['typeId']=='Carry']
             
                     #shotblock = anderson.loc[(anderson['shot']==True) & (anderson['82']==True) & (anderson['player_name'] == playerrequest)]
-                    shotoff = anderson.loc[(anderson['typeId'] == 'Miss')]
+                    shotoff = anderson.loc[(anderson['typeId'] == 'Miss') & (anderson['typeId'] == 'Post')]
                     shoton = anderson.loc[(anderson['typeId'] == 'Attempt Saved')]
                     shotgoal = anderson.loc[(anderson['typeId'] == 'Goal')]
                     playertouchmap = anderson.loc[anderson['typeId']!='Player on']
@@ -2435,7 +2435,7 @@ if matchlink:
                     scatter7 = pitch_third.scatter(clearance.x, clearance.y, ax=axes[2], facecolor='green',edgecolor='green', marker='^', label='Clearance', s=40)
                     scatter8 = pitch_third.scatter(takeont.x, takeont.y, ax=axes[2], facecolor='green',edgecolor='green', marker='P', label='Take On', s=40)
                     scatter9 = pitch_third.scatter(takeonf.x, takeonf.y, ax=axes[2], facecolor='red',edgecolor='red', marker='P', s=40)
-                    scatter10 = pitch_third.scatter(disposs.x, disposs.y, ax=axes[2], facecolor='red',edgecolor='red', marker='x', s=40, label = 'Dispossesed')
+                    #scatter10 = pitch_third.scatter(disposs.x, disposs.y, ax=axes[2], facecolor='red',edgecolor='red', marker='x', s=40, label = 'Dispossesed')
                     #scatter11 = pitch_third.scatter(shotblock.x, shotblock.y, ax=axes[2], facecolor='yellow',edgecolor='yellow', marker='o', s=40, label = 'Shot Blocked')
                     scatter12 = pitch_third.scatter(shotoff.x, shotoff.y, ax=axes[2], facecolor='red', marker='o',edgecolor='red', label='Shot Off Target', s=40)
                     scatter13 = pitch_third.scatter(shoton.x, shoton.y, ax=axes[2], facecolor='green', marker='o',edgecolor='green', label='Shot On Target', s=40)
