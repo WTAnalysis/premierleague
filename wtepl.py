@@ -2437,7 +2437,7 @@ if matchlink:
                     scatter7 = pitch_third.scatter(clearance.x, clearance.y, ax=axes[2], facecolor='green',edgecolor='green', marker='^', label='Clearance', s=40)
                     scatter8 = pitch_third.scatter(takeont.x, takeont.y, ax=axes[2], facecolor='green',edgecolor='green', marker='P', label='Take On', s=40)
                     scatter9 = pitch_third.scatter(takeonf.x, takeonf.y, ax=axes[2], facecolor='red',edgecolor='red', marker='P', s=40)
-                    #scatter10 = pitch_third.scatter(disposs.x, disposs.y, ax=axes[2], facecolor='red',edgecolor='red', marker='x', s=40, label = 'Dispossesed')
+                    scatter10 = pitch_third.scatter(disposs.x, disposs.y, ax=axes[2], facecolor='red',edgecolor='red', marker='x', s=40, label = 'Dispossesed')
                     #scatter11 = pitch_third.scatter(shotblock.x, shotblock.y, ax=axes[2], facecolor='yellow',edgecolor='yellow', marker='o', s=40, label = 'Shot Blocked')
                     scatter12 = pitch_third.scatter(shotoff.x, shotoff.y, ax=axes[2], facecolor='red', marker='o',edgecolor='red', label='Shot Off Target', s=40)
                     scatter17 = pitch_third.scatter(shotoff2.x, shotoff2.y, ax=axes[2], facecolor='red', marker='o',edgecolor='red', s=40)
@@ -2450,7 +2450,7 @@ if matchlink:
                     # Add legend
                     legend = axes[2].legend(handles=[scatter1, scatter3, scatter5, scatter6,
                                                      scatter7, scatter8, #scatter11, 
-                                                     #scatter10,
+                                                     scatter10,
                                                      scatter13, scatter14, scatter16
                                                     ], 
                                                      loc='upper center', bbox_to_anchor=(0.5, -0.02), ncol=2, facecolor='silver', frameon=False,labelcolor =TextColor)
