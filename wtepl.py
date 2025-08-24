@@ -2441,7 +2441,7 @@ if matchlink:
                     scatter13 = pitch_third.scatter(shoton.x, shoton.y, ax=axes[2], facecolor='green', marker='o',edgecolor='green', label='Shot On Target', s=40)
                     scatter14 = pitch_third.scatter(shotgoal.x, shotgoal.y, ax=axes[2], facecolor='green', marker='*',edgecolor='green', label='Goal', s=100)
                     scatter15 = pitch_third.scatter(fouls.x, fouls.y, ax=axes[2], facecolor='red', marker='>',edgecolor='red',s=40)
-                    scatter16 = pitch_third.scatter(error.x, error.y, ax=axes[2], facecolor='red', marker='+',edgecolor='red',s=40)
+                    scatter16 = pitch_third.scatter(error.x, error.y, ax=axes[2], facecolor='red', marker='+',edgecolor='red',s=40, label ='Error')
         
                     # Add legend
                     legend = axes[2].legend(handles=[scatter1, scatter3, scatter5, scatter6,
@@ -2785,6 +2785,8 @@ if matchlink:
                             show_ballrec       = st.checkbox("Ball Recoveries", value=select_all_actions, key="show_ballrec")
                             show_clearances    = st.checkbox("Clearances", value=select_all_actions, key="show_clearances")
                             show_interceptions = st.checkbox("Interceptions", value=select_all_actions, key="show_interceptions")
+                            show_errors = st.checkbox("Errors", value=select_all_actions, key="show_errors")
+
                         with col_ck2:
                             show_carries      = st.checkbox("Carries", value=select_all_actions, key="show_carries")
                             show_dribbles      = st.checkbox("Dribbles", value=select_all_actions, key="show_dribbles")
