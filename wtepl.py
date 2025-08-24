@@ -2446,7 +2446,7 @@ if matchlink:
                     # Add legend
                     legend = axes[2].legend(handles=[scatter1, scatter3, scatter5, scatter6,
                                                      scatter7, scatter8, #scatter11, 
-                                                     scatter10,
+                                                     #scatter10,
                                                      scatter13, scatter14, scatter16
                                                     ], 
                                                      loc='upper center', bbox_to_anchor=(0.5, -0.02), ncol=2, facecolor='silver', frameon=False,labelcolor =TextColor)
