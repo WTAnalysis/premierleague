@@ -3201,7 +3201,7 @@ if matchlink:
                             if show_interceptions and has_interceptions:
                                 legend_handles.append(mkr('H', 'green', label='Interceptions'))
                                 legend_labels.append('Interceptions')
-                            if show_errors and has_error:
+                            if show_errors and has_errors:
                                 legend_handles.append(mkr('x', 'green', label='Interceptions'))
                                 legend_labels.append('Errors')                     
                             if show_dribbles and has_dribbles:
