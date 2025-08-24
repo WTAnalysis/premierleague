@@ -2267,7 +2267,8 @@ if matchlink:
                     clearance = anderson.loc[(anderson['typeId']=='Clearance')]
                     interception = anderson.loc[(anderson['typeId']=='Interception') ]
                     shotblocked = anderson.loc[(anderson['typeId']=='Save')]
-            
+                    error = anderson.loc[(anderson['typeId']=='Error')]
+                    
                     disposs = anderson.loc[(anderson['typeId']=='Dispossessed')]
                     playercarry = anderson.loc[anderson['typeId']=='Carry']
             
@@ -2440,12 +2441,13 @@ if matchlink:
                     scatter13 = pitch_third.scatter(shoton.x, shoton.y, ax=axes[2], facecolor='green', marker='o',edgecolor='green', label='Shot On Target', s=40)
                     scatter14 = pitch_third.scatter(shotgoal.x, shotgoal.y, ax=axes[2], facecolor='green', marker='*',edgecolor='green', label='Goal', s=100)
                     scatter15 = pitch_third.scatter(fouls.x, fouls.y, ax=axes[2], facecolor='red', marker='>',edgecolor='red',s=40)
-            
+                    scatter16 = pitch_third.scatter(error.x, error.y, ax=axes[2], facecolor='red', marker='x',edgecolor='red',s=40)
+        
                     # Add legend
                     legend = axes[2].legend(handles=[scatter1, scatter3, scatter5, scatter6,
                                                      scatter7, scatter8, #scatter11, 
                                                      scatter10,
-                                                     scatter13, scatter14
+                                                     scatter13, scatter14, scatter16
                                                     ], 
                                                      loc='upper center', bbox_to_anchor=(0.5, -0.02), ncol=2, facecolor='silver', frameon=False,labelcolor =TextColor)
                     # Legend for the first subplot (axes[0])
@@ -3017,6 +3019,7 @@ if matchlink:
                         m_goal    =  is_type("Goal")                                           if is_type("Goal")   is not None else None
                         m_foul_u  = (is_type("Foul")         & is_outcome("Unsuccessful"))    if is_type("Foul")   is not None else None
                         m_intr   =  is_type("Interception")  if is_type("Interception") is not None else None
+                        m_error   =  is_type("Error")  if is_type("Error") is not None else None
 
                         # safe scatter helper
                         def plot_mask(mask, facecolor, edgecolor, marker, size):
@@ -3067,6 +3070,8 @@ if matchlink:
                             plot_mask(m_goal,   facecolor="green", edgecolor="green", marker="*", size=100)
                         if show_interceptions:
                             plot_mask(m_intr, facecolor="green", edgecolor="green", marker="H", size=40)
+                        if show_errors:
+                            plot_mask(m_error, facecolor="red", edgecolor="red", marker="x", size=40)
                         ax_image = add_image(
                             wtaimaged,
                             fig,
@@ -3129,6 +3134,8 @@ if matchlink:
                         has_shot_on       = mask_count(m_as_nblk) > 0
                         has_goals         = mask_count(m_goal) > 0
                         has_interceptions = mask_count(m_intr) > 0
+                        has_errors = mask_count(m_error) > 0
+
                         legend_handles = []
                         legend_labels  = []
                         from matplotlib.lines import Line2D
@@ -3192,7 +3199,9 @@ if matchlink:
                             if show_interceptions and has_interceptions:
                                 legend_handles.append(mkr('H', 'green', label='Interceptions'))
                                 legend_labels.append('Interceptions')
-                        
+                            if show_errors and has_error:
+                                legend_handles.append(mkr('x', 'green', label='Interceptions'))
+                                legend_labels.append('Errors')                     
                             if show_dribbles and has_dribbles:
                                 legend_handles.append(mkr('P', 'green', label='Dribbles'))
                                 legend_labels.append('Dribbles')
