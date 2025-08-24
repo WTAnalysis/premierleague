@@ -2441,7 +2441,7 @@ if matchlink:
                     scatter13 = pitch_third.scatter(shoton.x, shoton.y, ax=axes[2], facecolor='green', marker='o',edgecolor='green', label='Shot On Target', s=40)
                     scatter14 = pitch_third.scatter(shotgoal.x, shotgoal.y, ax=axes[2], facecolor='green', marker='*',edgecolor='green', label='Goal', s=100)
                     scatter15 = pitch_third.scatter(fouls.x, fouls.y, ax=axes[2], facecolor='red', marker='>',edgecolor='red',s=40)
-                    scatter16 = pitch_third.scatter(error.x, error.y, ax=axes[2], facecolor='red', marker='x',edgecolor='red',s=40)
+                    scatter16 = pitch_third.scatter(error.x, error.y, ax=axes[2], facecolor='red', marker='+',edgecolor='red',s=40)
         
                     # Add legend
                     legend = axes[2].legend(handles=[scatter1, scatter3, scatter5, scatter6,
@@ -3071,7 +3071,7 @@ if matchlink:
                         if show_interceptions:
                             plot_mask(m_intr, facecolor="green", edgecolor="green", marker="H", size=40)
                         if show_errors:
-                            plot_mask(m_error, facecolor="red", edgecolor="red", marker="x", size=40)
+                            plot_mask(m_error, facecolor="red", edgecolor="red", marker="+", size=40)
                         ax_image = add_image(
                             wtaimaged,
                             fig,
