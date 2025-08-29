@@ -2770,7 +2770,7 @@ if matchlink:
             title_font = FontProperties(family="Tahoma", size=15)
             ht_piece = f" | HT {ht_minute}’" if ht_minute is not None else ""
             ax.set_title(
-                f"{teamname} vs {opponentname} — Average Positions {minute_range[0]}’–{minute_range[1]}’{ht_piece}",
+                f"{teamname} vs {opponentname} — Average Positions {minute_range[0]}’–{minute_range[1]}mins",
                 fontproperties=title_font, color=_text_color
             )
         
