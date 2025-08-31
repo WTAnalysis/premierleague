@@ -2272,11 +2272,13 @@ if matchlink:
                     disposs = anderson.loc[(anderson['typeId']=='Dispossessed')]
                     playercarry = anderson.loc[anderson['typeId']=='Carry']
             
-                    #shotblock = anderson.loc[(anderson['shot']==True) & (anderson['82']==True) & (anderson['player_name'] == playerrequest)]
+                    shotblock = anderson.loc[(anderson['typeId'] == 'Attempt Saved')]
+                    shotblock = shotblock.loc[shotblock['shotblocked']==1]
                     shotoff = anderson.loc[(anderson['typeId'] == 'Miss')]
                     shotoff2 = anderson.loc[(anderson['typeId'] == 'Post')]
 
                     shoton = anderson.loc[(anderson['typeId'] == 'Attempt Saved')]
+                    shotblock = shotblock.loc[shotblock['shotblocked']==0]
                     shotgoal = anderson.loc[(anderson['typeId'] == 'Goal')]
                     playertouchmap = anderson.loc[anderson['typeId']!='Player on']
                     playertouchmap = playertouchmap.loc[playertouchmap['typeId']!='Player off']
@@ -2438,7 +2440,7 @@ if matchlink:
                     scatter8 = pitch_third.scatter(takeont.x, takeont.y, ax=axes[2], facecolor='green',edgecolor='green', marker='P', label='Take On', s=40)
                     scatter9 = pitch_third.scatter(takeonf.x, takeonf.y, ax=axes[2], facecolor='red',edgecolor='red', marker='P', s=40)
                     scatter10 = pitch_third.scatter(disposs.x, disposs.y, ax=axes[2], facecolor='red',edgecolor='red', marker='x', s=40, label = 'Dispossesed')
-                    #scatter11 = pitch_third.scatter(shotblock.x, shotblock.y, ax=axes[2], facecolor='yellow',edgecolor='yellow', marker='o', s=40, label = 'Shot Blocked')
+                    scatter11 = pitch_third.scatter(shotblock.x, shotblock.y, ax=axes[2], facecolor='yellow',edgecolor='yellow', marker='o', s=40)
                     scatter12 = pitch_third.scatter(shotoff.x, shotoff.y, ax=axes[2], facecolor='red', marker='o',edgecolor='red', label='Shot Off Target', s=40)
                     scatter17 = pitch_third.scatter(shotoff2.x, shotoff2.y, ax=axes[2], facecolor='red', marker='o',edgecolor='red', s=40)
 
