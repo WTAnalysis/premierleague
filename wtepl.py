@@ -2278,7 +2278,7 @@ if matchlink:
                     shotoff2 = anderson.loc[(anderson['typeId'] == 'Post')]
 
                     shoton = anderson.loc[(anderson['typeId'] == 'Attempt Saved')]
-                    shotblock = shotblock.loc[shotblock['shotblocked']==0]
+                    shoton = shoton.loc[shoton['shotblocked']==0]
                     shotgoal = anderson.loc[(anderson['typeId'] == 'Goal')]
                     playertouchmap = anderson.loc[anderson['typeId']!='Player on']
                     playertouchmap = playertouchmap.loc[playertouchmap['typeId']!='Player off']
