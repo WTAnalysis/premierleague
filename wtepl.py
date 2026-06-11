@@ -2327,8 +2327,32 @@ if matchlink:
                     URL = f"https://omo.akamai.opta.net/image.php?h=www.scoresway.com&sport=football&entity=team&description=badges&dimensions=150&id={teamlogoid}"
                     # EFFIONG https://cdn5.wyscout.com/photos/players/public/g144828_100x130.png
                     teamimage = Image.open(urlopen(URL))
-                    from PIL import Image
-            
+                    URL = f"https://omo.akamai.opta.net/image.php?h=www.scoresway.com&sport=football&entity=team&description=badges&dimensions=150&id={teamlogoid}"
+                    # EFFIONG https://cdn5.wyscout.com/photos/players/public/g144828_100x130.png
+                    # Get the selected player's Opta ID
+                    player_id = starting_lineups.loc[
+                        starting_lineups["player_name"] == playername,
+                        "player_id"
+                    ].iloc[0]
+                    
+                    playerimage = None
+                    
+                    if pd.notna(player_id):
+                        player_url = (
+                            "https://omo.akamai.opta.net/image.php"
+                            "?secure=true&h=omo.akamai.opta.net"
+                            "&sport=football"
+                            "&entity=player"
+                            "&description=xmip8t9f2kefltjkraxzsxl9"
+                            "&dimensions=103x155"
+                            f"&id={player_id}"
+                        )
+                    
+                        try:
+                            playerimage = Image.open(urlopen(player_url)).convert("RGBA")
+                        except Exception:
+                            # Some players may not have an Opta image.
+                            playerimage = None
                     wtaimaged = Image.open("wtatransnew.png")
                     from matplotlib.offsetbox import OffsetImage, AnnotationBbox
                     import matplotlib.pyplot as plt
@@ -2497,18 +2521,26 @@ if matchlink:
             
                     axes[2].text(50, -5, 'Green shows successful action, red shows unsuccessful', ha='center', fontsize=9, color=TextColor)
             
-                    #ax_image = add_image(playerimage, fig, left=0.4225, bottom=-0.04, width=0.04,
-                    #                    alpha=1, interpolation='hanning')
-            
-                    #ax_image = add_image(playerimage, fig, left=0.45, bottom=-0.045, width=0.03,
-                    #                     alpha=1, interpolation='hanning')
-                    ax_image = add_image(teamimage, fig, left=0.5375, bottom=-0.049, width=0.055,
-                                         alpha=1, interpolation='hanning')
-            
-                    ax_image = add_image(wtaimaged, fig, left=0.4375, bottom=-0.029, width=0.055,
-                                         alpha=1, interpolation='hanning')
-                    #ax_image = add_image(leagueimage, fig, left=0.565, bottom=-0.03175, width=0.03,
-                    #                     alpha=1, interpolation='hanning')
+                    ax_image = add_image(
+                        wtaimaged, fig,
+                        left=0.4375, bottom=-0.029, width=0.055,
+                        alpha=1, interpolation='hanning'
+                    )
+
+                    # Team logo directly beneath "All events plotted"
+                    ax_image = add_image(
+                        teamimage, fig,
+                        left=0.4875, bottom=-0.049, width=0.045,
+                        alpha=1, interpolation='hanning'
+                    )
+
+                    # Player image where the team logo was previously
+                    if playerimage is not None:
+                        ax_image = add_image(
+                            playerimage, fig,
+                            left=0.5375, bottom=-0.049, width=0.055,
+                            alpha=1, interpolation='hanning'
+                        )
                     dpi = 600
                     st.pyplot(fig)
                     st.success("Analysis Complete!")
