@@ -18,8 +18,8 @@ from matplotlib import colors as mcolors
 from PIL import Image
 
 # --- Page setup ---
-st.set_page_config(page_title="WT Analysis - Premier League Visuals", layout="wide")
-st.title("WT Analysis - Premier League Visuals")
+st.set_page_config(page_title="WT Analysis - World Cup Visuals", layout="wide")
+st.title("WT Analysis - World Cup Visuals")
 
 wtaimaged = Image.open("wtatransnew.png")
 homeimage = Image.open("wtatransnew.png")
