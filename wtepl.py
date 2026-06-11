@@ -2530,7 +2530,7 @@ if matchlink:
                     # Team logo directly beneath "All events plotted"
                     ax_image = add_image(
                         teamimage, fig,
-                        left=0.490, bottom=-0.047, width=0.045,
+                        left=0.490, bottom=-0.037, width=0.045,
                         alpha=1, interpolation='hanning'
                     )
 
