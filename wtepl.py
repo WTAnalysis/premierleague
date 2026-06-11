@@ -1208,6 +1208,9 @@ if matchlink:
         shotassisttotal = shotassisttotal.loc[shotassisttotal['xT_value']>0]
         teamname = teamdata.iloc[0, 1]
         opponentname = teamdata.iloc[1,1]
+
+        home_team_name = teamdata.iloc[0]["name"]
+        away_team_name = teamdata.iloc[1]["name"]
         RPxT = np.array([[0.00638303, 0.00779616, 0.00844854, 0.00977659, 0.01126267,
                                 0.01248344, 0.01473596, 0.0174506 , 0.02122129, 0.02756312,
                                 0.03485072, 0.0379259 ],
@@ -2738,12 +2741,12 @@ if matchlink:
             
                 # ---- build lineups (starters only) ----
                 homelineup = starting_lineups[
-                    (starting_lineups["team_name"] == teamname) &
+                    (starting_lineups["team_name"] == home_team_name) &
                     (starting_lineups["is_starter"] == "yes")
                 ].copy()
-            
+                
                 awaylineup = starting_lineups[
-                    (starting_lineups["team_name"] != teamname) &
+                    (starting_lineups["team_name"] == away_team_name) &
                     (starting_lineups["is_starter"] == "yes")
                 ].copy()
             
@@ -2818,7 +2821,7 @@ if matchlink:
                 # ---- title ----
                 title_font = FontProperties(family="Tahoma", size=15)
                 ax.set_title(
-                    f"{teamname} vs {opponentname} — Average Positions {minute_range[0]}’–{minute_range[1]}’",
+                    f"{home_team_name} vs {away_team_name} — Average Positions {minute_range[0]}’–{minute_range[1]}’",
                     fontproperties=title_font, color=_text_color
                 )
             
