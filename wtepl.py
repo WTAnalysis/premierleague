@@ -2530,7 +2530,7 @@ if matchlink:
                     # Team logo directly beneath "All events plotted"
                     ax_image = add_image(
                         teamimage, fig,
-                        left=0.490, bottom=-0.0485, width=0.045,
+                        left=0.490, bottom=-0.047, width=0.045,
                         alpha=1, interpolation='hanning'
                     )
 
@@ -2538,7 +2538,7 @@ if matchlink:
                     if playerimage is not None:
                         ax_image = add_image(
                             playerimage, fig,
-                            left=0.5585, bottom=-0.041, width=0.0275,
+                            left=0.5585, bottom=-0.039, width=0.0275,
                             alpha=1, interpolation='hanning'
                         )
                     dpi = 600
