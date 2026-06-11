@@ -1774,9 +1774,9 @@ if matchlink:
         league = selected_competition
         league_colors = {
             "FIFA World Cup": {
-                "TextColor": "white",
-                "BackgroundColor": "red",
-                "PitchColor": "#e5e1e0",
+                "TextColor": "gold",
+                "BackgroundColor": "#044a80",
+                "PitchColor": "white",
                 "PitchLineColor": "black",
                 "SonarPass": "#e5e1e0",
                 "SonarCarry": "darkblue",
