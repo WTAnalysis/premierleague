@@ -2523,14 +2523,14 @@ if matchlink:
             
                     ax_image = add_image(
                         wtaimaged, fig,
-                        left=0.4375, bottom=-0.029, width=0.055,
+                        left=0.4075, bottom=-0.029, width=0.055,
                         alpha=1, interpolation='hanning'
                     )
 
                     # Team logo directly beneath "All events plotted"
                     ax_image = add_image(
                         teamimage, fig,
-                        left=0.4875, bottom=-0.049, width=0.045,
+                        left=0.4975, bottom=-0.049, width=0.045,
                         alpha=1, interpolation='hanning'
                     )
 
@@ -2538,7 +2538,7 @@ if matchlink:
                     if playerimage is not None:
                         ax_image = add_image(
                             playerimage, fig,
-                            left=0.5375, bottom=-0.049, width=0.055,
+                            left=0.5375, bottom=-0.049, width=0.025,
                             alpha=1, interpolation='hanning'
                         )
                     dpi = 600
