@@ -1773,7 +1773,7 @@ if matchlink:
 
         league = selected_competition
         league_colors = {
-            "FA Cup": {
+            "FIFA World Cup": {
                 "TextColor": "white",
                 "BackgroundColor": "red",
                 "PitchColor": "#e5e1e0",
