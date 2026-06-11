@@ -2538,7 +2538,7 @@ if matchlink:
                     if playerimage is not None:
                         ax_image = add_image(
                             playerimage, fig,
-                            left=0.5585, bottom=-0.039, width=0.0275,
+                            left=0.5585, bottom=-0.03, width=0.0275,
                             alpha=1, interpolation='hanning'
                         )
                     dpi = 600
