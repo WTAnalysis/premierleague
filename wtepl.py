@@ -2339,13 +2339,7 @@ if matchlink:
                     
                     if pd.notna(player_id):
                         player_url = (
-                            "https://omo.akamai.opta.net/image.php"
-                            "?secure=true&h=omo.akamai.opta.net"
-                            "&sport=football"
-                            "&entity=player"
-                            "&description=xmip8t9f2kefltjkraxzsxl9"
-                            "&dimensions=103x155"
-                            f"&id={player_id}"
+                            f"https://omo.akamai.opta.net/image.php?secure=true&h=omo.akamai.opta.net&sport=football&entity=player&description=eg7vduna0h3vis1wd47s41za7&dimensions=103x155&id={player_id}"
                         )
                     
                         try:
